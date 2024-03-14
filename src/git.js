@@ -16,8 +16,6 @@ const {
 	GIT_USERNAME,
 	GIT_EMAIL,
 	TMP_DIR,
-	COMMIT_BODY,
-	COMMIT_PREFIX,
 	GITHUB_REPOSITORY,
 	OVERWRITE_EXISTING_PR,
 	SKIP_PR,
@@ -233,9 +231,9 @@ export default class Git {
 	}
 
 	async commit(msg) {
-		let message = msg !== undefined ? msg : `${ COMMIT_PREFIX } synced file(s) with ${ GITHUB_REPOSITORY }`
-		if (COMMIT_BODY) {
-			message += `\n\n${ COMMIT_BODY }`
+		let message = msg !== undefined ? msg : `${ PR_TITLE }`
+		if (PR_BODY) {
+			message += `\n\n${ PR_BODY }`
 		}
 		return execCmd(
 			`git commit -m '${ message.replace(/'/g, '\'\\\'\'') }'`,
@@ -435,7 +433,7 @@ export default class Git {
 			const { data } = await this.github.pulls.update({
 				owner: this.repo.user,
 				repo: this.repo.name,
-				title: `${ COMMIT_PREFIX } synced file(s) with ${ GITHUB_REPOSITORY }`,
+				title: this.existingPr.title,
 				pull_number: this.existingPr.number,
 				body: body
 			})
