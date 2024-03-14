@@ -21,7 +21,7 @@ const {
 	SKIP_PR,
 	PR_BODY,
 	PR_TITLE,
-	BRANCH_PREFIX,
+	BRANCH_NAME,
 	FORK
 } = config
 
@@ -128,9 +128,7 @@ export default class Git {
 	}
 
 	async createPrBranch() {
-		const prefix = BRANCH_PREFIX.replace('SOURCE_REPO_NAME', GITHUB_REPOSITORY.split('/')[1])
-
-		let newBranch = path.join(prefix, this.repo.branch).replace(/\\/g, '/').replace(/\/\./g, '/')
+		let newBranch = BRANCH_NAME
 
 		if (OVERWRITE_EXISTING_PR === false) {
 			newBranch += `-${ Math.round((new Date()).getTime() / 1000) }`

@@ -91,10 +91,10 @@ inputs:
     description: |
       Skips creating a Pull Request and pushes directly to the default branch. Defaults to false
     required: false
-  BRANCH_PREFIX:
+  BRANCH_NAME:
     description: |
-      Specify a different prefix for the new branch in the target repo. Defaults to repo-sync/SOURCE_REPO_NAME
-    required: false
+      Specify a different name for the new branch in the target repo.
+    required: true
   FORK:
     description: |
       Specify the user account that will be used in a fork and pull-request workflow. Defaults

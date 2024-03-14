@@ -101,31 +101,31 @@ With the `v1` tag you will always get the latest non-breaking version which will
 
 Here are all the inputs [repo-file-sync-action](https://github.com/BetaHuhn/repo-file-sync-action) takes:
 
-| Key | Value | Required | Default |
-| ------------- | ------------- | ------------- | ------------- |
+| Key | Value                                                                                                                                          | Required | Default |
+| ------------- |------------------------------------------------------------------------------------------------------------------------------------------------| ------------- | ------------- |
 | `GH_PAT` | Your [Personal Access token](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/creating-a-personal-access-token) | **`GH_PAT` or `GH_INSTALLATION_TOKEN` required** | N/A |
-| `GH_INSTALLATION_TOKEN` | Token from a GitHub App installation | **`GH_PAT` or `GH_INSTALLATION_TOKEN` required** | N/A |
-| `CONFIG_PATH` | Path to the sync configuration file | **No** | .github/sync.yml |
-| `PR_LABELS` | Labels which will be added to the pull request. Set to false to turn off | **No** | sync |
-| `ASSIGNEES` | Users to assign to the pull request | **No** | N/A |
-| `REVIEWERS` | Users to request a review of the pull request from | **No** | N/A |
-| `TEAM_REVIEWERS` | Teams to request a review of the pull request from | **No** | N/A |
-| `COMMIT_PREFIX` | Prefix for commit message and pull request title | **No** | 🔄 |
-| `COMMIT_BODY` | Commit message body. Will be appended to commit message, separated by two line returns. | **No** | '' |
-| `PR_BODY` | Additional content to add in the PR description. | **No** | '' |
-| `PR_TITLE` | Title of the pull request | **No** | Sync changes from source repository |
-| `ORIGINAL_MESSAGE` | Use original commit message instead. Only works if the file(s) were changed and the action was triggered by pushing a single commit. | **No** | false |
-| `COMMIT_AS_PR_TITLE` | Use first line of the commit message as PR title. Only works if `ORIGINAL_MESSAGE` is `true` and working. | **No** | false |
-| `COMMIT_EACH_FILE` | Commit each file seperately | **No** | true |
-| `GIT_EMAIL` | The e-mail address used to commit the synced files | **Only when using installation token** | the email of the PAT used |
-| `GIT_USERNAME` | The username used to commit the synced files | **Only when using installation token** | the username of the PAT used |
-| `OVERWRITE_EXISTING_PR` | Overwrite any existing Sync PR with the new changes | **No** | true |
-| `BRANCH_PREFIX` | Specify a different prefix for the new branch in the target repo | **No** | repo-sync/SOURCE_REPO_NAME |
-| `TMP_DIR` | The working directory where all git operations will be done | **No** | tmp-${ Date.now().toString() } |
-| `DRY_RUN` | Run everything except that nothing will be pushed | **No** | false |
-| `SKIP_CLEANUP` | Skips removing the temporary directory. Useful for debugging | **No** | false |
-| `SKIP_PR` | Skips creating a Pull Request and pushes directly to the default branch | **No** | false |
-| `FORK` | A Github account username. Changes will be pushed to a fork of target repos on this account. | **No** | false |
+| `GH_INSTALLATION_TOKEN` | Token from a GitHub App installation                                                                                                           | **`GH_PAT` or `GH_INSTALLATION_TOKEN` required** | N/A |
+| `CONFIG_PATH` | Path to the sync configuration file                                                                                                            | **No** | .github/sync.yml |
+| `PR_LABELS` | Labels which will be added to the pull request. Set to false to turn off                                                                       | **No** | sync |
+| `ASSIGNEES` | Users to assign to the pull request                                                                                                            | **No** | N/A |
+| `REVIEWERS` | Users to request a review of the pull request from                                                                                             | **No** | N/A |
+| `TEAM_REVIEWERS` | Teams to request a review of the pull request from                                                                                             | **No** | N/A |
+| `COMMIT_PREFIX` | Prefix for commit message and pull request title                                                                                               | **No** | 🔄 |
+| `COMMIT_BODY` | Commit message body. Will be appended to commit message, separated by two line returns.                                                        | **No** | '' |
+| `PR_BODY` | Additional content to add in the PR description.                                                                                               | **No** | '' |
+| `PR_TITLE` | Title of the pull request                                                                                                                      | **No** | Sync changes from source repository |
+| `ORIGINAL_MESSAGE` | Use original commit message instead. Only works if the file(s) were changed and the action was triggered by pushing a single commit.           | **No** | false |
+| `COMMIT_AS_PR_TITLE` | Use first line of the commit message as PR title. Only works if `ORIGINAL_MESSAGE` is `true` and working.                                      | **No** | false |
+| `COMMIT_EACH_FILE` | Commit each file seperately                                                                                                                    | **No** | true |
+| `GIT_EMAIL` | The e-mail address used to commit the synced files                                                                                             | **Only when using installation token** | the email of the PAT used |
+| `GIT_USERNAME` | The username used to commit the synced files                                                                                                   | **Only when using installation token** | the username of the PAT used |
+| `OVERWRITE_EXISTING_PR` | Overwrite any existing Sync PR with the new changes                                                                                            | **No** | true |
+| `BRANCH_NAME` | Specify a different name for the new branch in the target repo                                                                                 | **No** | repo-sync/SOURCE_REPO_NAME |
+| `TMP_DIR` | The working directory where all git operations will be done                                                                                    | **No** | tmp-${ Date.now().toString() } |
+| `DRY_RUN` | Run everything except that nothing will be pushed                                                                                              | **No** | false |
+| `SKIP_CLEANUP` | Skips removing the temporary directory. Useful for debugging                                                                                   | **No** | false |
+| `SKIP_PR` | Skips creating a Pull Request and pushes directly to the default branch                                                                        | **No** | false |
+| `FORK` | A Github account username. Changes will be pushed to a fork of target repos on this account.                                                   | **No** | false |
 
 ### Outputs
 
@@ -432,7 +432,7 @@ If your repo name contains invalid characters, like a dot ([#32](https://github.
 uses: BetaHuhn/repo-file-sync-action@v1
 with:
     GH_PAT: ${{ secrets.GH_PAT }}
-    BRANCH_PREFIX: custom-branch
+    BRANCH_NAME: custom-branch
 ```
 
 The new branch will then be `custom-branch/SOURCE_BRANCH_NAME`.
