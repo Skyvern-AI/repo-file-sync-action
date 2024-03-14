@@ -2,9 +2,9 @@
   
 # Repo File Sync Action
 
-[![Build CI](https://github.com/BetaHuhn/repo-file-sync-action/workflows/Test%20CI/badge.svg)](https://github.com/BetaHuhn/repo-file-sync-action/actions?query=workflow%3A%22Test+CI%22) [![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/BetaHuhn/repo-file-sync-action/blob/master/LICENSE) ![David](https://img.shields.io/david/betahuhn/repo-file-sync-action)
-
 Keep files like Action workflows or entire directories in sync between multiple repositories.
+
+*This project is a fork of [BetaHuhn/repo-file-sync-action](https://github.com/BetaHuhn/repo-file-sync-action) with some additional features and bug fixes.*
 
 </div>
 
