@@ -27,6 +27,10 @@ inputs:
     description: |
       Additional content to add in the PR description. Defaults to ''
     required: false
+  PR_TITLE:
+    description: |
+      Title for the pull request. Defaults to 'Sync changes from source repository'
+    required: false
   ASSIGNEES:
     description: |
       Users to assign to the pull request. Defaults to none

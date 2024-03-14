@@ -69,6 +69,10 @@ try {
 			key: 'PR_BODY',
 			default: ''
 		}),
+		PR_TITLE: getInput({
+            key: 'PR_TITLE',
+            default: 'Sync changes from source repository'
+        }),
 		ASSIGNEES: getInput({
 			key: 'ASSIGNEES',
 			type: 'array'

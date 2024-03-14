@@ -22,6 +22,7 @@ const {
 	OVERWRITE_EXISTING_PR,
 	SKIP_PR,
 	PR_BODY,
+	PR_TITLE
 	BRANCH_PREFIX,
 	FORK
 } = config
@@ -425,15 +426,7 @@ export default class Git {
 
 	async createOrUpdatePr(changedFiles, title) {
 		const body = dedent(`
-			synced local file(s) with [${ GITHUB_REPOSITORY }](${ GITHUB_SERVER_URL }/${ GITHUB_REPOSITORY }).
-
 			${ PR_BODY }
-
-			${ changedFiles }
-
-			---
-
-			This PR was created automatically by the [repo-file-sync-action](https://github.com/BetaHuhn/repo-file-sync-action) workflow run [#${ process.env.GITHUB_RUN_ID || 0 }](${ GITHUB_SERVER_URL }/${ GITHUB_REPOSITORY }/actions/runs/${ process.env.GITHUB_RUN_ID || 0 })
 		`)
 
 		if (this.existingPr) {
@@ -455,7 +448,7 @@ export default class Git {
 		const { data } = await this.github.pulls.create({
 			owner: this.repo.user,
 			repo: this.repo.name,
-			title: title === undefined ? `${ COMMIT_PREFIX } synced file(s) with ${ GITHUB_REPOSITORY }` : title,
+			title: title === undefined ? `${ PR_TITLE }` : title,
 			body: body,
 			head: `${ FORK ? FORK : this.repo.user }:${ this.prBranch }`,
 			base: this.baseBranch
