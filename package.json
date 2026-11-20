@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "lint": "eslint ./src",
+    "test": "node test/execCmd.js",
     "start": "node src/index.js",
     "build": "ncc build src/index.js -o dist -m --license licenses.txt"
   },
