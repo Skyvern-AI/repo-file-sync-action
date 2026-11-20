@@ -87,7 +87,8 @@ export default class Git {
 
 	async createRemote(forkUrl) {
 		return execCmd(
-			`git remote add fork ${ forkUrl }`,
+			'git',
+			[ 'remote', 'add', 'fork', forkUrl ],
 			this.workingDir
 		)
 	}
@@ -96,7 +97,8 @@ export default class Git {
 		core.debug(`Cloning ${ this.repo.fullName } into ${ this.workingDir }`)
 
 		return execCmd(
-			`git clone --depth 1 ${ this.repo.branch !== 'default' ? '--branch "' + this.repo.branch + '"' : '' } ${ this.gitUrl } ${ this.workingDir }`
+			'git',
+			[ 'clone', '--depth', '1', ...(this.repo.branch !== 'default' ? [ '--branch', this.repo.branch ] : []), this.gitUrl, this.workingDir ]
 		)
 	}
 
@@ -104,25 +106,34 @@ export default class Git {
 		let username = GIT_USERNAME
 		let email = GIT_EMAIL
 
-		if (email === undefined) {
-			if (!IS_INSTALLATION_TOKEN) {
-				const { data } = await this.github.users.getAuthenticated()
-				email = data.email
-				username = data.login
-			}
+		if (!IS_INSTALLATION_TOKEN && (typeof username !== 'string' || typeof email !== 'string')) {
+			const { data } = await this.github.users.getAuthenticated()
+			username = typeof username === 'string' ? username : data.login
+			email = typeof email === 'string' ? email : data.email || `${ data.login }@users.noreply.github.com`
+		}
+
+		if (typeof username !== 'string' || typeof email !== 'string') {
+			throw new TypeError('GIT_USERNAME and GIT_EMAIL must be strings')
 		}
 
 		core.debug(`Setting git user to email: ${ email }, username: ${ username }`)
 
+		await execCmd(
+			'git',
+			[ 'config', '--local', 'user.name', username ],
+			this.workingDir
+		)
 		return execCmd(
-			`git config --local user.name "${ username }" && git config --local user.email "${ email }"`,
+			'git',
+			[ 'config', '--local', 'user.email', email ],
 			this.workingDir
 		)
 	}
 
 	async getBaseBranch() {
 		this.baseBranch = await execCmd(
-			`git rev-parse --abbrev-ref HEAD`,
+			'git',
+			[ 'rev-parse', '--abbrev-ref', 'HEAD' ],
 			this.workingDir
 		)
 	}
@@ -137,7 +148,8 @@ export default class Git {
 		core.debug(`Creating PR Branch ${ newBranch }`)
 
 		await execCmd(
-			`git checkout -b "${ newBranch }"`,
+			'git',
+			[ 'checkout', '-b', newBranch ],
 			this.workingDir
 		)
 
@@ -146,7 +158,8 @@ export default class Git {
 
 	async add(file) {
 		return execCmd(
-			`git add -f "${ file }"`,
+			'git',
+			[ 'add', '-f', file ],
 			this.workingDir
 		)
 	}
@@ -206,14 +219,16 @@ export default class Git {
 
 	async getLastCommitSha() {
 		this.lastCommitSha = await execCmd(
-			`git rev-parse HEAD`,
+			'git',
+			[ 'rev-parse', 'HEAD' ],
 			this.workingDir
 		)
 	}
 
 	async changes(destination) { // gets array of git diffs for the destination, which either can be a file or a dict
 		const output = await execCmd(
-			`git diff HEAD ${ destination }`,
+			'git',
+			[ 'diff', 'HEAD', destination ],
 			this.workingDir
 		)
 		return Object.values(this.parseGitDiffOutput(output))
@@ -221,7 +236,8 @@ export default class Git {
 
 	async hasChanges() {
 		const statusOutput = await execCmd(
-			`git status --porcelain`,
+			'git',
+			[ 'status', '--porcelain' ],
 			this.workingDir
 		)
 
@@ -234,7 +250,8 @@ export default class Git {
 			message += `\n\n${ PR_BODY }`
 		}
 		return execCmd(
-			`git commit -m '${ message.replace(/'/g, '\'\\\'\'') }'`,
+			'git',
+			[ 'commit', '-m', message ],
 			this.workingDir
 		)
 	}
@@ -242,7 +259,8 @@ export default class Git {
 	// Returns a git tree parsed for the specified commit sha
 	async getTree(commitSha) {
 		const output = await execCmd(
-			`git ls-tree -r --full-tree ${ commitSha }`,
+			'git',
+			[ 'ls-tree', '-r', '--full-tree', commitSha ],
 			this.workingDir
 		)
 
@@ -295,7 +313,8 @@ export default class Git {
 	// Gets the commit list in chronological order
 	async getCommitsToPush() {
 		const output = await execCmd(
-			`git log --format=%H --reverse ${ SKIP_PR === false ? `` : `origin/` }${ this.baseBranch }..HEAD`,
+			'git',
+			[ 'log', '--format=%H', '--reverse', `${ SKIP_PR === false ? '' : 'origin/' }${ this.baseBranch }..HEAD` ],
 			this.workingDir
 		)
 
@@ -305,7 +324,8 @@ export default class Git {
 
 	async getCommitMessage(commitSha) {
 		return await execCmd(
-			`git log -1 --format=%B ${ commitSha }`,
+			'git',
+			[ 'log', '-1', '--format=%B', commitSha ],
 			this.workingDir
 		)
 	}
@@ -364,7 +384,8 @@ export default class Git {
 
 	async status() {
 		return execCmd(
-			`git status`,
+			'git',
+			[ 'status' ],
 			this.workingDir
 		)
 	}
@@ -372,7 +393,8 @@ export default class Git {
 	async push() {
 		if (FORK) {
 			return execCmd(
-				`git push -u fork ${ this.prBranch } --force`,
+				'git',
+				[ 'push', '-u', 'fork', this.prBranch, '--force' ],
 				this.workingDir
 			)
 		}
@@ -380,7 +402,8 @@ export default class Git {
 			return await this.createGithubVerifiedCommits()
 		}
 		return execCmd(
-			`git push ${ this.gitUrl } --force`,
+			'git',
+			[ 'push', this.gitUrl, '--force' ],
 			this.workingDir
 		)
 	}

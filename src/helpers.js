@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra'
 import readfiles from 'node-readfiles'
-import { exec } from 'child_process'
+import { execFile } from 'child_process'
 import * as core from '@actions/core'
 import * as path from 'path'
 import * as nunjucks from 'nunjucks'
@@ -42,11 +42,12 @@ export function dedent(templateStrings, ...values) {
 	return string
 }
 
-export function execCmd(command, workingDir, trimResult = true) {
-	core.debug(`EXEC: "${ command }" IN ${ workingDir }`)
+export function execCmd(command, args, workingDir, trimResult = true) {
+	core.debug(`EXEC: "${ command } ${ args.join(' ') }" IN ${ workingDir }`)
 	return new Promise((resolve, reject) => {
-		exec(
+		execFile(
 			command,
+			args,
 			{
 				cwd: workingDir,
 				maxBuffer: 1024 * 1024 * 4
