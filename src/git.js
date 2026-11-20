@@ -106,12 +106,14 @@ export default class Git {
 		let username = GIT_USERNAME
 		let email = GIT_EMAIL
 
-		if (email === undefined) {
-			if (!IS_INSTALLATION_TOKEN) {
-				const { data } = await this.github.users.getAuthenticated()
-				email = data.email
-				username = data.login
-			}
+		if (!IS_INSTALLATION_TOKEN && (typeof username !== 'string' || typeof email !== 'string')) {
+			const { data } = await this.github.users.getAuthenticated()
+			username = typeof username === 'string' ? username : data.login
+			email = typeof email === 'string' ? email : data.email || `${ data.login }@users.noreply.github.com`
+		}
+
+		if (typeof username !== 'string' || typeof email !== 'string') {
+			throw new TypeError('GIT_USERNAME and GIT_EMAIL must be strings')
 		}
 
 		core.debug(`Setting git user to email: ${ email }, username: ${ username }`)
